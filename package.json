@@ -1,0 +1,9 @@
+{
+  "name": "yahoo-websocket-wrapper",
+  "email": "alkrauss48@gmail.com",
+  "author": "Aaron Krauss",
+  "url": "http://thesocietea.org",
+  "dependencies": {
+    "faye": "1.0.1"
+  }
+}
