@@ -1,6 +1,6 @@
 {
   "SSE": {
-    "ticker": "SSE",
-    "url": "http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quotes where symbol = 'SSE'%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json"
+    "url": "http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quotes where symbol = 'SSE'%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json",
+    "pollingTime": 15000
   }
 }

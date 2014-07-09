@@ -4,7 +4,7 @@ var http   = require('http'),
 
 var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 
-function queryStock(channel){
+function queryChannel(channel){
   url = config[channel].url
 
   http.get(url, function(res) {
@@ -34,20 +34,20 @@ function queryStock(channel){
   });
 }
 
-// Spin through Redis to set up automatic publishing for stored stocks
+// Spin through config to set up automatic publishing for channels
 for (var key in config) {
   if (config.hasOwnProperty(key)) {
-    console.log("Setting up automatic stock publishing for channel: " + key);
+    console.log("Setting up automatic publishing for channel: " + key);
     setInterval(function(){
-      queryStock(key);
-    }, 5000);
+      queryChannel(key);
+    }, config[key].pollingTime);
   }
 }
 
 // Handle non-Bayeux requests
 var server = http.createServer(function(request, response) {
   response.writeHead(200, {'Content-Type': 'text/plain'});
-  response.write('Hello, I am currently responding to ' + config.length + ' stocks:\n\n');
+  response.write('Hello, I am currently responding to ' + config.length + ' channels:\n\n');
   for (var key in config) {
     if (config.hasOwnProperty(key)) {
       response.write(key + '\n');
@@ -59,7 +59,7 @@ var server = http.createServer(function(request, response) {
 // Handle new clients subscribing
 bayeux.on('subscribe', function(clientId, channel) {
   channel = channel.substring(1);
-  console.log('\nNew subscriber for channel: ' + channel + '\nPublishing existing stock data\n');
+  console.log('\nNew subscriber for channel: ' + channel + '\nPublishing existing channel data\n');
   // Don't need to requery the data for every new subscription
   bayeux.getClient().publish('/' + channel,{
     results: config[channel].prev_data
