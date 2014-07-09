@@ -1,14 +1,12 @@
-var http = require('http'),
-    faye = require('faye');
-
-var redis = require("redis"),
-    rClient = redis.createClient();
+var http   = require('http'),
+    faye   = require('faye'),
+    config = require('./config.json');
 
 var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 
-function queryStock(symbol){
-  var url = 'http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quotes where symbol = "' + symbol +
-    '"%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json';
+function queryStock(channel){
+  url = config[channel].url
+
   http.get(url, function(res) {
     var body = '';
 
@@ -18,45 +16,54 @@ function queryStock(symbol){
 
     res.on('end', function() {
       var data = JSON.parse(body)
-      console.log("Responding json for: " + symbol);
-      bayeux.getClient().publish('/' + symbol,{
-        quote: data.query.results.quote
-      });
+      var prev_data = JSON.stringify(config[channel].prev_data);
+      var new_data = JSON.stringify(data);
+      if(prev_data != new_data){
+        console.log("Responding json for: " + channel);
+        config[channel].prev_data = data;
+        bayeux.getClient().publish('/' + channel,{
+          results: data
+        });
+      }else{
+        // Don't publish if nothing has changed
+        console.log('Skipping channel: ' + channel + '. No new data');
+      }
     });
   }).on('error', function(e) {
     console.log("Got error: ", e);
   });
 }
 
+// Spin through Redis to set up automatic publishing for stored stocks
+for (var key in config) {
+  if (config.hasOwnProperty(key)) {
+    console.log("Setting up automatic stock publishing for channel: " + key);
+    setInterval(function(){
+      queryStock(key);
+    }, 5000);
+  }
+}
+
 // Handle non-Bayeux requests
 var server = http.createServer(function(request, response) {
   response.writeHead(200, {'Content-Type': 'text/plain'});
-  rClient.hkeys("stocks", function (err, replies) {
-    response.write('Hello, I am currently responding to ' + replies.length + ' stocks:\n\n');
-    replies.forEach(function (reply, i) {
-      response.write(i + ": " + reply + '\n');
-    });
-  });
-  setTimeout(function(){ response.end('\nGoodbye!'); }, 500);
+  response.write('Hello, I am currently responding to ' + config.length + ' stocks:\n\n');
+  for (var key in config) {
+    if (config.hasOwnProperty(key)) {
+      response.write(key + '\n');
+    }
+  }
+  response.end('\nGoodbye!');
 });
 
-// Spin through Redis to set up automatic publishing for stored stocks
-rClient.hkeys("stocks", function (err, replies) {
-  console.log(replies.length + " stocks:");
-  replies.forEach(function (reply, i) {
-    console.log("Setting up automatic stock publishing for:" + reply);
-    setInterval(function(){
-      queryStock(reply);
-    }, 15000);
-  });
-});
-
+// Handle new clients subscribing
 bayeux.on('subscribe', function(clientId, channel) {
   channel = channel.substring(1);
-  console.log('New Subscriber for channel: ' + channel);
-  // Add channel to Redis if it doesn't exist
-  rClient.hsetnx("stocks", channel, "0");
-  queryStock(channel);
+  console.log('\nNew subscriber for channel: ' + channel + '\nPublishing existing stock data\n');
+  // Don't need to requery the data for every new subscription
+  bayeux.getClient().publish('/' + channel,{
+    results: config[channel].prev_data
+  });
 })
 
 bayeux.attach(server);

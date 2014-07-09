@@ -4,8 +4,6 @@
   "author": "Aaron Krauss",
   "url": "http://thesocietea.org",
   "dependencies": {
-    "faye": "1.0.1",
-    "hiredis": "*",
-    "redis": "*"
+    "faye": "1.0.1"
   }
 }
