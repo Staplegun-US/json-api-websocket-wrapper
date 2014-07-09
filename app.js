@@ -47,7 +47,7 @@ rClient.hkeys("stocks", function (err, replies) {
     console.log("Setting up automatic stock publishing for:" + reply);
     setInterval(function(){
       queryStock(reply);
-    }, 10000);
+    }, 15000);
   });
 });
 
