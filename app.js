@@ -47,13 +47,13 @@ for (var key in config) {
 // Handle non-Bayeux requests
 var server = http.createServer(function(request, response) {
   response.writeHead(200, {'Content-Type': 'text/plain'});
-  response.write('Hello, I am currently responding to ' + config.length + ' channels:\n\n');
+  response.write('Hello, I am currently responding to ' + Object.keys(config).length + ' channels:\n\n');
   for (var key in config) {
     if (config.hasOwnProperty(key)) {
       response.write(key + '\n');
     }
   }
-  response.end('\nGoodbye!');
+  response.end('\nTo edit any of these channels, please edit the config.json file. Goodbye!');
 });
 
 // Handle new clients subscribing
