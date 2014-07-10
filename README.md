@@ -26,7 +26,7 @@ npm install
 cp config.json.example config.json # Now edit the config file
 ```
 
-## Deploying
+## Running
 ```bash
 node app.js
 ```
@@ -69,6 +69,9 @@ client.subscribe('/channel-name', function(data) {
 
 Everytime the wrapper publishes a new JSON blob, this subscribe callback will be
 called with the new JSON.
+
+<b>Important:</b> The channel-name here must be the same channel-name as defined
+in the config file, as well as preceded by a `/`
 
 ## License
 
