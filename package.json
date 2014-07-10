@@ -1,6 +1,6 @@
 {
   "name": "json-api-websocket-wrapper",
-  "description": "A node.js server that will poll multiple JSON APIs for you, and publish the result to all clients subscribed through web sockets"
+  "description": "A node.js server that will poll multiple JSON APIs for you, and publish the result to all clients subscribed through web sockets",
   "email": "akrauss@staplegun.us",
   "author": "Staplegun Design",
   "url": "http://staplegun.us",
@@ -8,7 +8,7 @@
     "type"  : "git",
     "url"   : "https://github.com/Staplegun-US/json-api-websocket-wrapper"
   },
-  "homepage": "https://github.com/Staplegun-US/json-api-websocket-wrapper"
+  "homepage": "https://github.com/Staplegun-US/json-api-websocket-wrapper",
   "dependencies": {
     "faye": "1.0.1"
   }
