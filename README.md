@@ -26,13 +26,13 @@ npm install
 cp config.json.example config.json # Now edit the config file
 ```
 
-## Running Locally for Development
+### Running Locally for Development
 To run a local server:
 ```bash
 node app.js
 ```
 
-## Running as a Daemon
+### Running as a Daemon
 A Makefile has been set up with basic tasks related to running the server as a
 daemon. To set the daemon up:
 ```bash
@@ -49,11 +49,19 @@ To kill all daemon-related processes:
 make stop
 ```
 
-### Config
-Based on the config file, the wrapper will continuously poll the preset API urls at
-preset intervals and publish new JSON blobs to the subscribed clients. The
-config file reflects the APIs that are continuously polled, and is structured in
-the following form:
+### Initializing Server at Boot
+To automatically start the node server at boot, edit your crontab file (`crontab -e`)
+and add:
+```bash
+@reboot cd project-dir && make start # change project-dir to a real dir
+```
+
+## Config
+You will need to create a `config.json` file at the project root. You can use the
+config.json.example as a starting point. Based on the config file, the wrapper will
+continuously poll the preset API urls at preset intervals and publish new JSON
+blobs to the subscribed clients. The config file reflects the APIs that are continuously
+polled, and is structured in the following form:
 
 ```javascript
 {
@@ -66,7 +74,7 @@ the following form:
 The `channel-name` key can have any name you want. `url` and `pollingTime` must
 remain those names. Add as many channel hashes as you want.
 
-### Browser Code
+## Browser Code
 
 To reap the benefits of websockets, you will need to add some client side code.
 The JSON API Websocket Wrapper uses [Faye.js](http://faye.jcoglan.com/).
