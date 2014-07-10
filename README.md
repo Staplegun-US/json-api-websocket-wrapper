@@ -26,9 +26,27 @@ npm install
 cp config.json.example config.json # Now edit the config file
 ```
 
-## Running
+## Running Locally for Development
+To run a local server:
 ```bash
 node app.js
+```
+
+## Running as a Daemon
+A Makefile has been set up with basic tasks related to running the server as a
+daemon. To set the daemon up:
+```bash
+make start
+```
+
+To see all running background processes related to the daemon:
+```bash
+make list
+```
+
+To kill all daemon-related processes:
+```bash
+make stop
 ```
 
 ### Config
