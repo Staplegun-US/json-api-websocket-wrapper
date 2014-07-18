@@ -1,8 +1,8 @@
 list:
 	@ echo "$$(tput setaf 6)Monitor script processes:$$(tput sgr 0)"
-	@ pgrep -fl "./monitor"
+	-@ pgrep -fl "./monitor"
 	@ echo "$$(tput setaf 6)Node app processes:$$(tput sgr 0)"
-	@ pgrep -fl "node ./app.js"
+	-@ pgrep -fl "node ./app.js"
 start:
 	nohup ./monitor &
 	@ echo "$$(tput setaf 6)Started json-api-websocket-wrapper daemon"$$(tput sgr 0)
