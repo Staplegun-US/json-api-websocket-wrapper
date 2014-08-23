@@ -1,6 +1,6 @@
 var http   = require('http'),
     faye   = require('faye'),
-    config = require('./config.json');
+    config = require('../config/config.json');
 
 var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 
