@@ -2,17 +2,18 @@ var http   = require('http'),
     faye   = require('faye'),
     config = require('../config/config.json');
 
+var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
+
 module.exports = {
-  bayeux: new faye.NodeAdapter({mount: '/faye', timeout: 45}),
   attach: function(server){
-    this.bayeux.attach(server);
+    bayeux.attach(server);
   },
   init_callbacks: function(){
-    this.bayeux.on('subscribe', function(clientId, channel) {
+    bayeux.on('subscribe', function(clientId, channel) {
       channel = channel.substring(1);
       console.log('\nNew subscriber for channel: ' + channel + '\nPublishing existing channel data\n');
       // Don't need to requery the data for every new subscription
-      this.getClient().publish('/' + channel,{
+      bayeux.getClient().publish('/' + channel,{
         results: config[channel].prev_data
       });
     })
@@ -29,7 +30,6 @@ module.exports = {
   },
   queryChannel: function(channel){
     url     = config[channel].url
-    bayeux  = this.bayeux;
 
     http.get(url, function(res) {
       var body = '';
