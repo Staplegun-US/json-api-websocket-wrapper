@@ -23,7 +23,7 @@ of the load.
 git clone https://github.com/Staplegun-US/json-api-websocket-wrapper.git
 cd json-api-websocket-wrapper.git
 npm install
-cp config.json.example config.json # Now edit the config file
+cp config/config.json.example config/config.json # Now edit the config file
 ```
 
 ### Running Locally for Development
@@ -57,7 +57,7 @@ and add:
 ```
 
 ## Config
-You will need to create a `config.json` file at the project root. You can use the
+You will need to create a `config.json` file at in the `config/` directory. You can use the
 config.json.example as a starting point. Based on the config file, the wrapper will
 continuously poll the preset API urls at preset intervals and publish new JSON
 blobs to the subscribed clients. The config file reflects the APIs that are continuously
