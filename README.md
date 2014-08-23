@@ -29,7 +29,7 @@ cp config.json.example config.json # Now edit the config file
 ### Running Locally for Development
 To run a local server:
 ```bash
-node app.js
+node ./app/app.js
 ```
 
 ### Running as a Daemon
