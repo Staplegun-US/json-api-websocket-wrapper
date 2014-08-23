@@ -10,6 +10,6 @@
   },
   "homepage": "https://github.com/Staplegun-US/json-api-websocket-wrapper",
   "dependencies": {
-    "faye": "1.0.1"
+    "faye": "1.0.3"
   }
 }
