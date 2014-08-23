@@ -29,9 +29,7 @@ module.exports = {
     }
   },
   queryChannel: function(channel){
-    url     = config[channel].url
-
-    http.get(url, function(res) {
+    http.get(config[channel].url, function(res) {
       var body = '';
 
       res.on('data', function(chunk) {
